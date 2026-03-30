@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fintech & Banking</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="logic.js"></script>
+</head>
+<body>
+
+<h1 class="page-title" = "Fintech Banking"</h1>
+
+<div class="grid">
+  <div class="card" id="card-loan">
+    <span class="badge">ВИСОК РИСК</span>
+    <div class="card-header">
+      <span class="icon">🏦</span>
+      <div>
+        <h2>Заявка за кредит</h2>
+        <p>Валидация на доходи и кредитна история</p>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+       FORM 1 · Заявка за кредит
+  ═══════════════════════════════════════════════════════════════════ -->
+    <form id="loanForm" novalidate>
+      <div class="row-2">
+        <div class="form-group">
+          <label for="l-name">Три имена</label>
+          <input id="l-name" type="text" placeholder="Иван Петров Иванов" />
+          <span class="err" id="l-name-err">Въведете пълно ime (мин. 5 символа).</span>
+        </div>
+        <div class="form-group">
+          <label for="l-egn">ЕГН</label>
+          <input id="l-egn" type="text" placeholder="9504120110" maxlength="10" />
+          <span class="err" id="l-egn-err">Невалидно ЕГН (10 цифри).</span>
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div class="form-group">
+          <label for="l-income">Месечен доход (BGN)</label>
+          <input id="l-income" type="number" min="0" placeholder="3500" />
+          <span class="err" id="l-income-err">Доходът трябва да е &gt; 0.</span>
+        </div>
+        <div class="form-group">
+          <label for="l-employer">Работодател</label>
+          <input id="l-employer" type="text" placeholder="Компания ЕООД" />
+          <span class="err" id="l-employer-err">Попълнете работодателя.</span>
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div class="form-group">
+          <label for="l-amount">Сума на кредита (BGN)</label>
+          <input id="l-amount" type="number" min="100" placeholder="15000" />
+          <span class="err" id="l-amount-err">Мин. сума 100 BGN.</span>
+        </div>
+        <div class="form-group">
+          <label for="l-months">Срок (месеци)</label>
+          <select id="l-months">
+            <option value="">– избери –</option>
+            <option>12</option><option>24</option><option>36</option>
+            <option>48</option><option>60</option><option>84</option>
+          </select>
+          <span class="err" id="l-months-err">Изберете срок.</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="l-score">Кредитен рейтинг (self-declared)</label>
+        <select id="l-score">
+          <option value="">– избери –</option>
+          <option value="excellent">Отличен (750+)</option>
+          <option value="good">Добър (650–749)</option>
+          <option value="fair">Задоволителен (550–649)</option>
+          <option value="poor">Лош (&lt;550)</option>
+        </select>
+        <span class="err" id="l-score-err">Изберете кредитен рейтинг.</span>
+      </div>
+
+      <!-- Live DTI meter -->
+      <div id="l-dti-wrap" style="display:none">
+        <div class="risk-row">
+          <span class="risk-label">Debt-to-Income (DTI)</span>
+          <span class="risk-val" id="l-dti-val">–</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="l-dti-bar" style="width:0%"></div></div>
+        <p class="hint" id="l-dti-hint"></p>
+      </div>
+
+      <button type="submit" class="btn btn-green" style="margin-top:.9rem">Изпрати заявка</button>
+      <div class="success-msg" id="l-success">✔ Заявката е приета за разглеждане. Референция: <span id="l-ref"></span></div>
+    </form>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       FORM 2 · Крипто транзакция
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="card" id="card-crypto">
+    <span class="badge">ВИСОК РИСК</span>
+    <div class="card-header">
+      <span class="icon">₿</span>
+      <div>
+        <h2>Крипто транзакция</h2>
+        <p>Валидация на портфейл (Hash) и сума</p>
+      </div>
+    </div>
+
+    <form id="cryptoForm" novalidate>
+      <div class="form-group">
+        <label for="c-asset">Криптовалута</label>
+        <select id="c-asset">
+          <option value="">– избери –</option>
+          <option value="btc">Bitcoin (BTC)</option>
+          <option value="eth">Ethereum (ETH)</option>
+          <option value="usdt">Tether (USDT)</option>
+          <option value="bnb">BNB</option>
+        </select>
+        <span class="err" id="c-asset-err">Изберете криптовалута.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="c-wallet">Адрес на портфейл (получател)</label>
+        <input id="c-wallet" type="text" placeholder="0x… / bc1… / 1…" spellcheck="false" />
+        <span class="err" id="c-wallet-err">Невалиден адрес за избраната мрежа.</span>
+        <div class="hash-preview" id="c-hash-preview"></div>
+      </div>
+
+      <div class="row-2">
+        <div class="form-group">
+          <label for="c-amount">Сума</label>
+          <input id="c-amount" type="number" step="0.00000001" placeholder="0.05" />
+          <span class="err" id="c-amount-err">Въведете валидна сума &gt; 0.</span>
+        </div>
+        <div class="form-group">
+          <label for="c-fee">Мрежова такса</label>
+          <input id="c-fee" type="text" readonly placeholder="изчислява се…" id="c-fee" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="c-note">Бележка / Memo (незадължително)</label>
+        <input id="c-note" type="text" placeholder="Покупка за инвестиция" />
+      </div>
+
+      <div class="form-group">
+        <label>Потвърждение на транзакцията (PIN)</label>
+        <div class="otp-wrap" id="c-pin-wrap">
+          <input class="otp" maxlength="1" type="password" inputmode="numeric" />
+          <input class="otp" maxlength="1" type="password" inputmode="numeric" />
+          <input class="otp" maxlength="1" type="password" inputmode="numeric" />
+          <input class="otp" maxlength="1" type="password" inputmode="numeric" />
+          <input class="otp" maxlength="1" type="password" inputmode="numeric" />
+          <input class="otp" maxlength="1" type="password" inputmode="numeric" />
+        </div>
+        <span class="err show" id="c-pin-err" style="display:none">Въведете 6-цифрен PIN.</span>
+      </div>
+
+      <!-- Integrity check -->
+      <div class="status-bar" id="c-integrity">
+        <span class="dot dot-grey"></span>
+        <span id="c-integrity-text">Попълнете формата за проверка на целостта.</span>
+      </div>
+
+      <button type="submit" class="btn btn-warn">Изпрати транзакция</button>
+      <div class="success-msg" id="c-success">✔ Транзакцията е изпратена за потвърждение. TxID: <span id="c-txid"></span></div>
+    </form>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       FORM 3 · Искане за овърдрафт
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="card" id="card-od">
+    <span class="badge">ВИСОК РИСК</span>
+    <div class="card-header">
+      <span class="icon">📉</span>
+      <div>
+        <h2>Искане за овърдрафт</h2>
+        <p>Проверка на лимити в реално време</p>
+      </div>
+    </div>
+
+    <form id="odForm" novalidate>
+      <div class="form-group">
+        <label for="od-iban">IBAN на сметка</label>
+        <input id="od-iban" type="text" placeholder="BG80BNBG96611020345678" maxlength="22" />
+        <span class="err" id="od-iban-err">Невалиден BG IBAN (22 символа).</span>
+      </div>
+
+      <div class="row-2">
+        <div class="form-group">
+          <label for="od-balance">Текущо салдо (BGN)</label>
+          <input id="od-balance" type="number" placeholder="250.00" />
+          <span class="err" id="od-balance-err">Въведете текущо салдо.</span>
+        </div>
+        <div class="form-group">
+          <label for="od-limit">Разрешен лимит (BGN)</label>
+          <input id="od-limit" type="number" placeholder="1000" readonly />
+          <span class="hint">Зарежда се автоматично</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="od-req">Искана сума за овърдрафт (BGN)</label>
+        <input id="od-req" type="number" min="50" placeholder="500" />
+        <span class="err" id="od-req-err">Сумата надвишава разрешения лимит.</span>
+      </div>
+
+      <!-- Real-time limit gauge -->
+      <div id="od-gauge-wrap">
+        <div class="risk-row">
+          <span class="risk-label">Използване на лимит</span>
+          <span class="risk-val" id="od-gauge-pct">–</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="od-gauge-bar" style="width:0%; background:var(--accent)"></div>
+        </div>
+      </div>
+
+      <div class="status-bar" id="od-status" style="margin-top:.8rem">
+        <span class="dot dot-grey"></span>
+        <span id="od-status-text">Въведете IBAN за проверка на лимит.</span>
+      </div>
+
+      <div class="form-group" style="margin-top:.8rem">
+        <label for="od-reason">Причина за искането</label>
+        <textarea id="od-reason" placeholder="Временна нужда от ликвидност за…"></textarea>
+        <span class="err" id="od-reason-err">Опишете причината (мин. 20 символа).</span>
+      </div>
+
+      <button type="submit" class="btn btn-blue">Заяви овърдрафт</button>
+      <div class="success-msg" id="od-success">✔ Заявката е одобрена. Лимитът е активен.</div>
+    </form>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       FORM 4 · Регистрация на корпоративна карта
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="card" id="card-corp">
+    <span class="badge">ВИСОК РИСК</span>
+    <div class="card-header">
+      <span class="icon">💳</span>
+      <div>
+        <h2>Корпоративна карта</h2>
+        <p>Нива на оторизация</p>
+      </div>
+    </div>
+
+    <form id="corpForm" novalidate>
+      <div class="row-2">
+        <div class="form-group">
+          <label for="cc-company">Фирма (наименование)</label>
+          <input id="cc-company" type="text" placeholder="Tech Solutions ЕООД" />
+          <span class="err" id="cc-company-err">Въведете наименование.</span>
+        </div>
+        <div class="form-group">
+          <label for="cc-eik">ЕИК / Булстат</label>
+          <input id="cc-eik" type="text" placeholder="123456789" maxlength="9" />
+          <span class="err" id="cc-eik-err">ЕИК трябва да е 9 цифри.</span>
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div class="form-group">
+          <label for="cc-holder">Картодържател</label>
+          <input id="cc-holder" type="text" placeholder="Мария Димитрова" />
+          <span class="err" id="cc-holder-err">Въведете две имена.</span>
+        </div>
+        <div class="form-group">
+          <label for="cc-email">Служебен имейл</label>
+          <input id="cc-email" type="email" placeholder="m.dimitrova@company.bg" />
+          <span class="err" id="cc-email-err">Невалиден имейл адрес.</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="cc-level">Ниво на оторизация</label>
+        <select id="cc-level">
+          <option value="">– избери –</option>
+          <option value="1">Ниво 1 – до 500 BGN/ден (служител)</option>
+          <option value="2">Ниво 2 – до 2 000 BGN/ден (мениджър)</option>
+          <option value="3">Ниво 3 – до 10 000 BGN/ден (директор)</option>
+          <option value="4">Ниво 4 – неограничен (изпълнителен директор)</option>
+        </select>
+        <span class="err" id="cc-level-err">Изберете ниво на оторизация.</span>
+      </div>
+
+      <!-- Authorization steps -->
+      <div class="auth-steps" id="cc-steps">
+        <div class="auth-step">
+          <span class="step-num step-wait" id="cc-s1-num">1</span>
+          <span class="step-text">Верификация на ЕИК в Търговски регистър</span>
+          <span class="step-check" id="cc-s1-check" style="display:none">✔</span>
+        </div>
+        <div class="auth-step">
+          <span class="step-num step-wait" id="cc-s2-num">2</span>
+          <span class="step-text">Одобрение от Финансов мениджър</span>
+          <span class="step-check" id="cc-s2-check" style="display:none">✔</span>
+        </div>
+        <div class="auth-step">
+          <span class="step-num step-wait" id="cc-s3-num">3</span>
+          <span class="step-text">Двуфакторна верификация (TOTP)</span>
+          <span class="step-check" id="cc-s3-check" style="display:none">✔</span>
+        </div>
+        <div class="auth-step">
+          <span class="step-num step-wait" id="cc-s4-num">4</span>
+          <span class="step-text">Активиране от банков оператор</span>
+          <span class="step-check" id="cc-s4-check" style="display:none">✔</span>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:.9rem">
+        <label for="cc-monthly">Месечен лимит (BGN)</label>
+        <input id="cc-monthly" type="number" min="0" placeholder="5000" />
+        <span class="err" id="cc-monthly-err">Въведете месечен лимит.</span>
+      </div>
+
+      <button type="submit" class="btn btn-blue">Регистрирай карта</button>
+      <div class="success-msg" id="cc-success">✔ Заявката е подадена. Очаква одобрение на Ниво 2.</div>
+    </form>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       FORM 5 · Валутен обмен
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="card" id="card-fx">
+    <span class="badge">ВИСОК РИСК</span>
+    <div class="card-header">
+      <span class="icon">💱</span>
+      <div>
+        <h2>Валутен обмен</h2>
+        <p>Актуални курсове &amp; цялостност на транзакцията</p>
+      </div>
+    </div>
+
+    <form id="fxForm" novalidate>
+      <div class="row-2">
+        <div class="form-group">
+          <label for="fx-from">От валута</label>
+          <select id="fx-from">
+            <option value="BGN">BGN – Лев</option>
+            <option value="EUR">EUR – Евро</option>
+            <option value="USD">USD – Долар</option>
+            <option value="GBP">GBP – Паунд</option>
+            <option value="CHF">CHF – Франк</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="fx-to">Към валута</label>
+          <select id="fx-to">
+            <option value="EUR">EUR – Евро</option>
+            <option value="BGN">BGN – Лев</option>
+            <option value="USD">USD – Долар</option>
+            <option value="GBP">GBP – Паунд</option>
+            <option value="CHF">CHF – Франк</option>
+          </select>
+        </div>
+      </div>
+      <span class="err show" id="fx-pair-err" style="display:none">Изберете различни валути.</span>
+
+      <div class="rate-display" id="fx-rate-box">
+        <div>
+          <div class="rate-big" id="fx-rate-val">–</div>
+          <div class="rate-ts" id="fx-rate-ts">Изберете валутна двойка</div>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm" id="fx-refresh-btn">⟳ Обнови</button>
+      </div>
+
+      <div class="form-group" style="margin-top:.8rem">
+        <label for="fx-amount">Сума (изходна валута)</label>
+        <input id="fx-amount" type="number" min="1" placeholder="1000" />
+        <span class="err" id="fx-amount-err">Въведете сума &gt; 0.</span>
+      </div>
+
+      <div class="rate-display" id="fx-result-box" style="display:none">
+        <div>
+          <div style="font-size:.75rem;color:var(--muted)">Ще получите</div>
+          <div class="rate-big" id="fx-converted">–</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:.75rem;color:var(--muted)">Такса (0.5%)</div>
+          <div style="font-weight:600;color:#d29922" id="fx-fee-val">–</div>
+        </div>
+      </div>
+
+      <!-- Integrity ticker -->
+      <div class="status-bar" id="fx-integrity" style="margin-top:.8rem">
+        <span class="dot dot-grey" id="fx-int-dot"></span>
+        <span id="fx-int-text">Курсът не е верифициран.</span>
+      </div>
+
+      <div class="form-group" style="margin-top:.8rem">
+        <label for="fx-purpose">Цел на обмена</label>
+        <select id="fx-purpose">
+          <option value="">– избери –</option>
+          <option>Лично ползване</option>
+          <option>Бизнес плащане</option>
+          <option>Инвестиция</option>
+          <option>Пътуване</option>
+        </select>
+        <span class="err" id="fx-purpose-err">Изберете цел.</span>
+      </div>
+
+      <button type="submit" class="btn btn-warn">Потвърди обмена</button>
+      <div class="success-msg" id="fx-success">✔ Обменът е изпълнен успешно. Референция: <span id="fx-ref"></span></div>
+    </form>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       FORM 6 · Възстановяване на парола (MFA)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="card" id="card-mfa">
+    <span class="badge">ВИСОК РИСК</span>
+    <div class="card-header">
+      <span class="icon">🔐</span>
+      <div>
+        <h2>Възстановяване на парола</h2>
+        <p>Многофакторна автентикация (MFA)</p>
+      </div>
+    </div>
+
+    <!-- Step 1: Identity -->
+    <div id="mfa-step1">
+      <p style="font-size:.8rem;color:var(--muted);margin-bottom:1rem">Стъпка 1 от 3 – Потвърдете самоличността си</p>
+      <div class="form-group">
+        <label for="mfa-user">Потребителско име / имейл</label>
+        <input id="mfa-user" type="text" placeholder="ivan.petrov@bank.bg" />
+        <span class="err" id="mfa-user-err">Въведете валиден имейл или потребителско ime.</span>
+      </div>
+      <div class="form-group">
+        <label for="mfa-dob">Дата на раждане</label>
+        <input id="mfa-dob" type="date" />
+        <span class="err" id="mfa-dob-err">Въведете дата на раждане.</span>
+      </div>
+      <div class="form-group">
+        <label for="mfa-phone">Регистриран телефон (последни 4 цифри)</label>
+        <input id="mfa-phone" type="text" maxlength="4" placeholder="7823" />
+        <span class="err" id="mfa-phone-err">Въведете последните 4 цифри.</span>
+      </div>
+      <button type="button" class="btn btn-blue" id="mfa-btn1">Продължи →</button>
+    </div>
+
+    <!-- Step 2: OTP -->
+    <div id="mfa-step2" style="display:none">
+      <p style="font-size:.8rem;color:var(--muted);margin-bottom:1rem">Стъпка 2 от 3 – Въведете SMS кода</p>
+      <div class="status-bar" style="margin-bottom:.8rem">
+        <span class="dot dot-blue"></span>
+        <span>SMS код изпратен на ***<span id="mfa-phone-hint"></span></span>
+      </div>
+      <div class="form-group">
+        <label>Еднократен код (OTP)</label>
+        <div class="otp-wrap" id="mfa-otp-wrap">
+          <input class="otp mfa-otp" maxlength="1" type="text" inputmode="numeric" />
+          <input class="otp mfa-otp" maxlength="1" type="text" inputmode="numeric" />
+          <input class="otp mfa-otp" maxlength="1" type="text" inputmode="numeric" />
+          <input class="otp mfa-otp" maxlength="1" type="text" inputmode="numeric" />
+          <input class="otp mfa-otp" maxlength="1" type="text" inputmode="numeric" />
+          <input class="otp mfa-otp" maxlength="1" type="text" inputmode="numeric" />
+        </div>
+        <span class="err" id="mfa-otp-err">Невалиден OTP код.</span>
+        <p class="hint" id="mfa-timer">Кодът изтича след: <strong id="mfa-countdown">02:00</strong></p>
+      </div>
+
+      <div class="form-group">
+        <label>Изберете метод за допълнителна верификация</label>
+        <select id="mfa-method">
+          <option value="sms">SMS (вече изпратен)</option>
+          <option value="app">Authenticator App (TOTP)</option>
+          <option value="email">Имейл линк</option>
+          <option value="backup">Резервен код</option>
+        </select>
+      </div>
+      <button type="button" class="btn btn-blue" id="mfa-btn2">Верифицирай →</button>
+    </div>
+
+    <!-- Step 3: New password -->
+    <div id="mfa-step3" style="display:none">
+      <p style="font-size:.8rem;color:var(--muted);margin-bottom:1rem">Стъпка 3 от 3 – Задайте нова парола</p>
+      <div class="form-group">
+        <label for="mfa-pass1">Нова парола</label>
+        <input id="mfa-pass1" type="password" placeholder="мин. 12 символа" />
+        <span class="err" id="mfa-pass1-err">Паролата трябва да е мин. 12 символа, с главна буква, цифра и спец. символ.</span>
+      </div>
+
+      <!-- Strength bar -->
+      <div class="progress-track" style="margin-bottom:.3rem">
+        <div class="progress-fill" id="mfa-strength-bar" style="width:0%"></div>
+      </div>
+      <p class="hint" id="mfa-strength-txt">Сила на паролата: –</p>
+
+      <div class="form-group">
+        <label for="mfa-pass2">Повторете паролата</label>
+        <input id="mfa-pass2" type="password" placeholder="повторете" />
+        <span class="err" id="mfa-pass2-err">Паролите не съвпадат.</span>
+      </div>
+
+      <div class="form-group">
+        <label style="display:flex;gap:.5rem;align-items:center;cursor:pointer;font-weight:normal">
+          <input type="checkbox" id="mfa-logout-all" style="width:auto" />
+          Изходиране от всички устройства
+        </label>
+      </div>
+
+      <button type="button" class="btn btn-green" id="mfa-btn3">Задай нова парола</button>
+    </div>
+
+    <div class="success-msg" id="mfa-success">
+      ✔ Паролата е сменена успешно. Ще бъдете пренасочени към входа.
+    </div>
+
+    <!-- Progress indicator -->
+    <div style="display:flex;gap:.4rem;justify-content:center;margin-top:1rem" id="mfa-dots">
+      <span id="mfa-d1" style="width:8px;height:8px;border-radius:50%;background:var(--accent2);display:inline-block"></span>
+      <span id="mfa-d2" style="width:8px;height:8px;border-radius:50%;background:var(--border);display:inline-block"></span>
+      <span id="mfa-d3" style="width:8px;height:8px;border-radius:50%;background:var(--border);display:inline-block"></span>
+    </div>
+  </div>
+</div>
+</body>
+</html>
