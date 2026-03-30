@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fintech & Banking</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="logic.js"></script>
+    <script src="fx-conversion.js"></script>
+</head>
+
+<body>
+    <div class="card" id="card-fx">
+        <span class="badge">ВИСОК РИСК</span>
+        <div class="card-header">
+            <span class="icon">💱</span>
+            <div>
+                <h2>Валутен обмен</h2>
+                <p>Актуални курсове &amp; цялостност на транзакцията</p>
+            </div>
+        </div>
+
+        <form id="fxForm" novalidate>
+            <div class="row-2">
+                <div class="form-group">
+                    <label for="fx-from">От валута</label>
+                    <select id="fx-from">
+                        <option value="BGN">BGN – Лев</option>
+                        <option value="EUR">EUR – Евро</option>
+                        <option value="USD">USD – Долар</option>
+                        <option value="GBP">GBP – Паунд</option>
+                        <option value="CHF">CHF – Франк</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fx-to">Към валута</label>
+                    <select id="fx-to">
+                        <option value="EUR">EUR – Евро</option>
+                        <option value="BGN">BGN – Лев</option>
+                        <option value="USD">USD – Долар</option>
+                        <option value="GBP">GBP – Паунд</option>
+                        <option value="CHF">CHF – Франк</option>
+                    </select>
+                </div>
+            </div>
+            <span class="err show" id="fx-pair-err" style="display:none">Изберете различни валути.</span>
+
+            <div class="rate-display" id="fx-rate-box" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1rem">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                    <div>
+                        <div class="rate-big" id="fx-rate-val" style="color:var(--accent);font-size:1.4rem;font-weight:600">–</div>
+                        <div class="rate-ts" id="fx-rate-ts" style="font-size:.85rem;color:var(--muted);margin-top:.5rem">Изберете валутна двойка</div>
+                    </div>
+                    <button type="button" class="btn btn-ghost btn-sm" id="fx-refresh-btn">⟳ Обнови</button>
+                </div>
+            </div>
+
+            <div class="row-2">
+                <div class="form-group">
+                    <label for="fx-amount">Дававте</label>
+                    <input id="fx-amount" type="number" min="1" placeholder="1000" />
+                    <span class="err" id="fx-amount-err">Въведете сума &gt; 0.</span>
+                </div>
+                <div class="form-group">
+                    <label for="fx-target-amount">Получавате</label>
+                    <input id="fx-target-amount" type="number" min="1" placeholder="1000" />
+                </div>
+            </div>
+
+            <div class="rate-display" id="fx-result-box" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1rem">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <div style="font-size:.75rem;color:var(--muted)">Ще получите</div>
+                        <div class="rate-big" id="fx-converted" style="color:var(--accent);font-size:1.4rem;font-weight:600;margin-top:.3rem">–</div>
+                    </div>
+                    <div style="text-align:right">
+                        <div style="font-size:.75rem;color:var(--muted)">Такса (0.5%)</div>
+                        <div style="font-weight:600;color:#d29922;font-size:1rem;margin-top:.3rem" id="fx-fee-val">–</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)">
+                <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1rem">
+                    <div class="dot dot-grey" id="fx-int-dot"></div>
+                    <div id="fx-int-text" style="font-size:.9rem;color:var(--muted)">Попълнете формата за проверка</div>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top:.8rem">
+                <label for="fx-purpose">Цел на трансфера</label>
+                <select id="fx-purpose" required>
+                    <option value="">Изберете</option>
+                    <option value="payment">Плащане на фактура</option>
+                    <option value="transfer">Преводане на средства</option>
+                    <option value="investment">Инвестиция</option>
+                    <option value="salary">Заплата</option>
+                    <option value="other">Други</option>
+                </select>
+                <span class="err" id="fx-purpose-err">Изберете цел.</span>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top:1rem;width:100%">Потвърди преводане</button>
+
+            <div id="fx-success" class="success-box" style="display:none;margin-top:1rem">
+                <div style="color:#3fb950;font-weight:600">✓ Преводането е потвърдено</div>
+                <div style="font-size:.9rem;color:var(--muted);margin-top:.5rem">Референция: <strong id="fx-ref">–</strong></div>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
