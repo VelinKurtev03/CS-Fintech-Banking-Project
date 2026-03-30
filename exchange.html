@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <form id="fxForm" novalidate>
+        <form id="fxForm">
             <div class="row-2">
                 <div class="form-group">
                     <label for="fx-from">От валута</label>
@@ -46,11 +46,14 @@
             </div>
             <span class="err show" id="fx-pair-err" style="display:none">Изберете различни валути.</span>
 
-            <div class="rate-display" id="fx-rate-box" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1rem">
+            <div class="rate-display" id="fx-rate-box"
+                style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1rem">
                 <div style="display:flex;justify-content:space-between;align-items:flex-start">
                     <div>
-                        <div class="rate-big" id="fx-rate-val" style="color:var(--accent);font-size:1.4rem;font-weight:600">–</div>
-                        <div class="rate-ts" id="fx-rate-ts" style="font-size:.85rem;color:var(--muted);margin-top:.5rem">Изберете валутна двойка</div>
+                        <div class="rate-big" id="fx-rate-val"
+                            style="color:var(--accent);font-size:1.4rem;font-weight:600">–</div>
+                        <div class="rate-ts" id="fx-rate-ts"
+                            style="font-size:.85rem;color:var(--muted);margin-top:.5rem">Изберете валутна двойка</div>
                     </div>
                     <button type="button" class="btn btn-ghost btn-sm" id="fx-refresh-btn">⟳ Обнови</button>
                 </div>
@@ -59,25 +62,45 @@
             <div class="row-2">
                 <div class="form-group">
                     <label for="fx-amount">Дававте</label>
-                    <input id="fx-amount" type="number" min="1" placeholder="1000" />
+                    <input id="fx-amount" type="number" min="1" placeholder="1000" min="0" required />
                     <span class="err" id="fx-amount-err">Въведете сума &gt; 0.</span>
                 </div>
                 <div class="form-group">
                     <label for="fx-target-amount">Получавате</label>
-                    <input id="fx-target-amount" type="number" min="1" placeholder="1000" />
+                    <input id="fx-target-amount" type="number" min="1" placeholder="1000" min="0" required />
                 </div>
             </div>
 
-            <div class="rate-display" id="fx-result-box" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1rem">
+            <div class="rate-display" id="fx-result-box"
+                style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1rem">
                 <div style="display:flex;justify-content:space-between;align-items:center">
                     <div>
                         <div style="font-size:.75rem;color:var(--muted)">Ще получите</div>
-                        <div class="rate-big" id="fx-converted" style="color:var(--accent);font-size:1.4rem;font-weight:600;margin-top:.3rem">–</div>
+                        <div class="rate-big" id="fx-converted"
+                            style="color:var(--accent);font-size:1.4rem;font-weight:600;margin-top:.3rem">–</div>
                     </div>
                     <div style="text-align:right">
                         <div style="font-size:.75rem;color:var(--muted)">Такса (0.5%)</div>
-                        <div style="font-weight:600;color:#d29922;font-size:1rem;margin-top:.3rem" id="fx-fee-val">–</div>
+                        <div style="font-weight:600;color:#d29922;font-size:1rem;margin-top:.3rem" id="fx-fee-val">–
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="row-2" style="margin-top:1.5rem">
+                <div class="form-group">
+                    <label for="fx-source-account">Источна сметка</label>
+                    <input id="fx-source-account" type="text" placeholder="BG12 XXXX XXXX XXXX XXXX XX"
+                        pattern="^[A-Z]{2}\d{2}[A-Z0-9]{13,30}$"
+                        required />
+                    <span class="err" id="fx-source-account-err">Въведете валидна сметка.</span>
+                </div>
+                <div class="form-group">
+                    <label for="fx-dest-account">Целева сметка</label>
+                    <input id="fx-dest-account" type="text" placeholder="DE12 XXXX XXXX XXXX XXXX XX"
+                        pattern="^[A-Z]{2}\d{2}[A-Z0-9]{13,30}$"
+                        required />
+                    <span class="err" id="fx-dest-account-err">Въведете валидна сметка.</span>
                 </div>
             </div>
 
@@ -105,7 +128,8 @@
 
             <div id="fx-success" class="success-box" style="display:none;margin-top:1rem">
                 <div style="color:#3fb950;font-weight:600">✓ Преводането е потвърдено</div>
-                <div style="font-size:.9rem;color:var(--muted);margin-top:.5rem">Референция: <strong id="fx-ref">–</strong></div>
+                <div style="font-size:.9rem;color:var(--muted);margin-top:.5rem">Референция: <strong
+                        id="fx-ref">–</strong></div>
             </div>
         </form>
     </div>

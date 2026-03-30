@@ -92,3 +92,28 @@ document.getElementById('fx-to').addEventListener('change', function() {
   document.getElementById('fx-target-amount').value = '';
   document.getElementById('fx-result-box').style.display = 'none';
 });
+
+/* Account validation */
+function validateAccount(accountInput, errId) {
+  const value = accountInput.value.trim();
+  const isValid = value.length > 0 && /^[A-Z]{2}\d{2}[A-Z0-9]{15,30}$/.test(value);
+
+  if (isValid) {
+    accountInput.classList.add('valid');
+    accountInput.classList.remove('invalid');
+    document.getElementById(errId).classList.remove('show');
+  } else if (value.length > 0) {
+    accountInput.classList.add('invalid');
+    accountInput.classList.remove('valid');
+    document.getElementById(errId).classList.add('show');
+  }
+  return isValid;
+}
+
+document.getElementById('fx-source-account').addEventListener('input', function() {
+  validateAccount(this, 'fx-source-account-err');
+});
+
+document.getElementById('fx-dest-account').addEventListener('input', function() {
+  validateAccount(this, 'fx-dest-account-err');
+});
