@@ -198,7 +198,7 @@
     .risk-high   { color: #f85149; }
 
     /* ── MFA dots ─────────────────────────────────────────────────────── */
-    .otp-wrap { display: flex; gap: .5rem; margin-top: .4rem; }
+    .otp-wrap { display: flex; gap: .5rem; margin-top: .4rem; justify-content: center; }
     .otp-wrap input {
       width: 44px; height: 50px;
       text-align: center;
