@@ -53,6 +53,8 @@ function updateDTI() {
   }
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+
 ['l-income','l-amount','l-months'].forEach(id =>
   el(id).addEventListener('input', updateDTI)
 );
@@ -472,3 +474,5 @@ el('mfa-btn3').addEventListener('click', function() {
     el('mfa-success').classList.add('show');
   }
 });
+
+}); // DOMContentLoaded

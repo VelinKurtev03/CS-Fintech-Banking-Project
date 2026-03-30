@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../../logic.js"></script>
+    <link rel="stylesheet" href="../../style.css">
+    <title>Регистрация на корпоративна карта</title>
+</head>
+<body>
+  <div class="card" id="card-corp">
+    <span class="badge">ВИСОК РИСК</span>
+    <div class="card-header">
+      <span class="icon">💳</span>
+      <div>
+        <h2>Корпоративна карта</h2>
+        <p>Нива на оторизация</p>
+      </div>
+    </div>
+
+    <form id="corpForm" novalidate>
+      <div class="row-2">
+        <div class="form-group">
+          <label for="cc-company">Фирма (наименование)</label>
+          <input id="cc-company" type="text" placeholder="Tech Solutions ЕООД" />
+          <span class="err" id="cc-company-err">Въведете наименование.</span>
+        </div>
+        <div class="form-group">
+          <label for="cc-eik">ЕИК / Булстат</label>
+          <input id="cc-eik" type="text" placeholder="123456789" maxlength="9" />
+          <span class="err" id="cc-eik-err">ЕИК трябва да e 9 цифри.</span>
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div class="form-group">
+          <label for="cc-holder">Картодържател</label>
+          <input id="cc-holder" type="text" placeholder="Мария Димитрова" />
+          <span class="err" id="cc-holder-err">Въведете две имена.</span>
+        </div>
+        <div class="form-group">
+          <label for="cc-email">Служебен имейл</label>
+          <input id="cc-email" type="email" placeholder="m.dimitrova@company.bg" />
+          <span class="err" id="cc-email-err">Невалиден имейл адрес.</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="cc-level">Ниво на оторизация</label>
+        <select id="cc-level">
+          <option value="">- избери -</option>
+          <option value="1">Ниво 1 - до 500 BGN/ден (служител)</option>
+          <option value="2">Ниво 2 - до 2 000 BGN/ден (мениджър)</option>
+          <option value="3">Ниво 3 - до 10 000 BGN/ден (директор)</option>
+          <option value="4">Ниво 4 - неограничен (изпълнителен директор)</option>
+        </select>
+        <span class="err" id="cc-level-err">Изберете ниво на оторизация.</span>
+      </div>
+
+      <div class="form-group" style="margin-top:.9rem">
+        <label for="cc-monthly">Месечен лимит (BGN)</label>
+        <input id="cc-monthly" type="number" min="0" placeholder="5000" />
+        <span class="err" id="cc-monthly-err">Въведете месечен лимит.</span>
+      </div>
+
+      <button type="submit" class="btn btn-blue">Регистрирай карта</button>
+      <div class="success-msg" id="cc-success">✔ Заявката e подадена. Очаква одобрение на Ниво 2.</div>
+    </form>
+  </div>
+
+</body>
+</html>
