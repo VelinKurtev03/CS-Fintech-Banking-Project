@@ -1,72 +1,438 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bg">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../../logic.js"></script>
-    <link rel="stylesheet" href="../../style.css">
-    <title>Регистрация на корпоративна карта</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Регистрация на корпоративна карта</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <script src="corporateCard.js" defer></script>
 </head>
+
 <body>
-  <div class="card" id="card-corp">
-    <span class="badge">ВИСОК РИСК</span>
-    <div class="card-header">
-      <span class="icon">💳</span>
-      <div>
-        <h2>Корпоративна карта</h2>
-        <p>Нива на оторизация</p>
+  <div style="max-width:720px;margin:2rem auto;padding:0 1rem">
+    <div class="card" id="card-corp">
+      <span class="badge">ВИСОК РИСК</span>
+      <div class="card-header">
+        <span class="icon">💳</span>
+        <div>
+          <h2>Корпоративна карта</h2>
+          <p>Многостъпкова регистрация</p>
+        </div>
       </div>
+
+      <!-- Step progress nav -->
+      <div id="corp-nav" style="display:flex;gap:.2rem;margin-bottom:1.1rem">
+        <div id="cni-1"
+          style="flex:1;padding:.4rem .1rem;text-align:center;border-radius:6px;font-size:.62rem;font-weight:700;background:var(--accent);color:#fff;transition:background .2s">
+          1·Фирма</div>
+        <div id="cni-2"
+          style="flex:1;padding:.4rem .1rem;text-align:center;border-radius:6px;font-size:.62rem;font-weight:700;background:var(--surface2,#21262d);color:var(--muted);transition:background .2s">
+          2·Управител</div>
+        <div id="cni-3"
+          style="flex:1;padding:.4rem .1rem;text-align:center;border-radius:6px;font-size:.62rem;font-weight:700;background:var(--surface2,#21262d);color:var(--muted);transition:background .2s">
+          3·Карта</div>
+        <div id="cni-4"
+          style="flex:1;padding:.4rem .1rem;text-align:center;border-radius:6px;font-size:.62rem;font-weight:700;background:var(--surface2,#21262d);color:var(--muted);transition:background .2s">
+          4·Документи</div>
+        <div id="cni-5"
+          style="flex:1;padding:.4rem .1rem;text-align:center;border-radius:6px;font-size:.62rem;font-weight:700;background:var(--surface2,#21262d);color:var(--muted);transition:background .2s">
+          5·Финал</div>
+      </div>
+
+      <form id="corpForm" novalidate>
+        <input type="hidden" id="corp-ts" />
+
+        <!-- ── STEP 1: Данни за фирмата ──────────────────────────── -->
+        <div id="corp-s1">
+          <p class="hint" style="margin-bottom:.8rem">Стъпка 1 от 5 – Данни за фирмата</p>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="cc-company">Наименование на фирмата</label>
+              <input id="cc-company" type="text" placeholder="Tech Solutions ЕООД" />
+              <span class="err" id="cc-company-err">Въведете наименование (мин. 3 символа).</span>
+            </div>
+            <div class="form-group">
+              <label for="cc-eik">ЕИК / Булстат</label>
+              <input id="cc-eik" type="text" placeholder="123456789" maxlength="9" />
+              <span class="err" id="cc-eik-err">ЕИК трябва да е 9 цифри.</span>
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="cc-vat">ДДС номер <span
+                  style="font-weight:normal;color:var(--muted)">(незадължително)</span></label>
+              <input id="cc-vat" type="text" placeholder="BG123456789" />
+              <span class="err" id="cc-vat-err">Формат: BG + 9 цифри.</span>
+            </div>
+            <div class="form-group">
+              <label for="cc-reg-date">Дата на регистрация</label>
+              <input id="cc-reg-date" type="date" />
+              <span class="err" id="cc-reg-date-err">Изберете дата на регистрация.</span>
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="cc-legal">Правна форма</label>
+              <select id="cc-legal">
+                <option value="">– избери –</option>
+                <option>ЕООД</option>
+                <option>ООД</option>
+                <option>АД</option>
+                <option>ЕАД</option>
+                <option>СД</option>
+                <option>КД</option>
+                <option>ЕТ</option>
+              </select>
+              <span class="err" id="cc-legal-err">Изберете правна форма.</span>
+            </div>
+            <div class="form-group">
+              <label for="cc-activity">Основна дейност</label>
+              <input id="cc-activity" type="text" placeholder="Разработка на софтуер" />
+              <span class="err" id="cc-activity-err">Въведете основна дейност.</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cc-addr-reg">Адрес на регистрация</label>
+            <input id="cc-addr-reg" type="text" placeholder="гр. София, ул. Витоша 1" />
+            <span class="err" id="cc-addr-reg-err">Въведете адрес на регистрация.</span>
+          </div>
+
+          <div class="form-group">
+            <label style="display:flex;gap:.5rem;align-items:center;cursor:pointer;font-weight:normal">
+              <input type="checkbox" id="cc-same-addr" style="width:auto" checked />
+              Адресът за кореспонденция съвпада с адреса на регистрация
+            </label>
+          </div>
+
+          <div class="form-group" id="cc-addr-corr-wrap" style="display:none">
+            <label for="cc-addr-corr">Адрес за кореспонденция</label>
+            <input id="cc-addr-corr" type="text" placeholder="гр. Пловдив, ул. Централна 5" />
+            <span class="err" id="cc-addr-corr-err">Въведете адрес за кореспонденция.</span>
+          </div>
+
+          <div class="form-group">
+            <label for="cc-website">Уебсайт <span style="font-weight:normal;color:var(--muted)">(по
+                избор)</span></label>
+            <input id="cc-website" type="text" placeholder="https://example.bg" />
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;margin-top:.8rem">
+            <button type="button" class="btn btn-blue" id="corp-next-1">Напред →</button>
+          </div>
+        </div>
+
+        <!-- ── STEP 2: Данни за представляващия ─────────────────── -->
+        <div id="corp-s2" style="display:none">
+          <p class="hint" style="margin-bottom:.8rem">Стъпка 2 от 5 – Данни за представляващия</p>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="cc-rep-name">Три имена</label>
+              <input id="cc-rep-name" type="text" placeholder="Иван Петров Иванов" />
+              <span class="err" id="cc-rep-name-err">Въведете поне две имена.</span>
+            </div>
+            <div class="form-group">
+              <label for="cc-rep-egn">ЕГН / ЛНЧ</label>
+              <input id="cc-rep-egn" type="text" placeholder="7501010010" maxlength="10" />
+              <span class="err" id="cc-rep-egn-err">Въведете 10-цифрен ЕГН/ЛНЧ.</span>
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="cc-rep-dob">Дата на раждане</label>
+              <input id="cc-rep-dob" type="date" />
+              <span class="err" id="cc-rep-dob-err">Въведете дата на раждане.</span>
+            </div>
+            <div class="form-group">
+              <label for="cc-rep-citizen">Гражданство</label>
+              <input id="cc-rep-citizen" type="text" placeholder="Българско" />
+              <span class="err" id="cc-rep-citizen-err">Въведете гражданство.</span>
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="cc-doc-type">Тип документ</label>
+              <select id="cc-doc-type">
+                <option value="">– избери –</option>
+                <option value="id">Лична карта</option>
+                <option value="passport">Паспорт</option>
+              </select>
+              <span class="err" id="cc-doc-type-err">Изберете тип документ.</span>
+            </div>
+            <div class="form-group">
+              <label for="cc-doc-num">Номер на документа</label>
+              <input id="cc-doc-num" type="text" placeholder="123456789" />
+              <span class="err" id="cc-doc-num-err">Въведете номер на документа.</span>
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="cc-doc-issued">Дата на издаване</label>
+              <input id="cc-doc-issued" type="date" />
+              <span class="err" id="cc-doc-issued-err">Въведете дата на издаване.</span>
+            </div>
+            <div class="form-group">
+              <label for="cc-doc-expiry">Дата на валидност</label>
+              <input id="cc-doc-expiry" type="date" />
+              <span class="err" id="cc-doc-expiry-err">Въведете дата на валидност.</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cc-doc-issuer">Издател</label>
+            <input id="cc-doc-issuer" type="text" placeholder="МВР – гр. София" />
+            <span class="err" id="cc-doc-issuer-err">Въведете издател.</span>
+          </div>
+
+          <div class="form-group">
+            <label for="cc-rep-addr">Адрес по лична карта</label>
+            <input id="cc-rep-addr" type="text" placeholder="гр. София, ж.к. Лозенец, бл. 10" />
+            <span class="err" id="cc-rep-addr-err">Въведете адрес по лична карта.</span>
+          </div>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="cc-rep-phone">Телефон</label>
+              <input id="cc-rep-phone" type="tel" placeholder="+359 88 888 8888" />
+              <span class="err" id="cc-rep-phone-err">Въведете телефонен номер.</span>
+            </div>
+            <div class="form-group">
+              <label for="cc-rep-email">Имейл</label>
+              <input id="cc-rep-email" type="email" placeholder="ivan@company.bg" />
+              <span class="err" id="cc-rep-email-err">Въведете валиден имейл.</span>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;margin-top:.8rem">
+            <button type="button" class="btn btn-ghost" id="corp-prev-2">← Назад</button>
+            <button type="button" class="btn btn-blue" id="corp-next-2">Напред →</button>
+          </div>
+        </div>
+
+        <!-- ── STEP 3: Данни за картата ──────────────────────────── -->
+        <div id="corp-s3" style="display:none">
+          <p class="hint" style="margin-bottom:.8rem">Стъпка 3 от 5 – Данни за корпоративната карта</p>
+
+          <div class="form-group">
+            <label>Тип карта</label>
+            <div style="display:flex;gap:1.5rem;margin-top:.35rem">
+              <label style="display:flex;gap:.4rem;align-items:center;font-weight:normal;cursor:pointer">
+                <input type="radio" name="cc-card-type" value="debit" style="width:auto" checked /> Дебитна
+              </label>
+              <label style="display:flex;gap:.4rem;align-items:center;font-weight:normal;cursor:pointer">
+                <input type="radio" name="cc-card-type" value="credit" style="width:auto" /> Кредитна
+              </label>
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="cc-currency">Валутна сметка</label>
+              <select id="cc-currency">
+                <option value="BGN">BGN – Лев</option>
+                <option value="EUR">EUR – Евро</option>
+                <option value="USD">USD – Долар</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cc-iban">Свързана банкова сметка (IBAN)</label>
+              <input id="cc-iban" type="text" placeholder="BG80BNBG96611020345678" maxlength="22" />
+              <span class="err" id="cc-iban-err">Невалиден BG IBAN (22 символа).</span>
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="cc-embossed">Име върху картата (латиница)</label>
+              <input id="cc-embossed" type="text" placeholder="IVAN PETROV" maxlength="26" />
+              <span class="err" id="cc-embossed-err">Въведете латинско ime (мин. 4 символа).</span>
+            </div>
+            <div class="form-group">
+              <label for="cc-num-cards">Брой карти</label>
+              <input id="cc-num-cards" type="number" min="1" max="10" value="1" />
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="cc-daily-limit">Дневен лимит (BGN)</label>
+              <input id="cc-daily-limit" type="number" min="0" placeholder="2000" />
+              <span class="err" id="cc-daily-limit-err">Въведете дневен лимит.</span>
+            </div>
+            <div class="form-group">
+              <label for="cc-monthly">Месечен лимит (BGN)</label>
+              <input id="cc-monthly" type="number" min="0" placeholder="10000" />
+              <span class="err" id="cc-monthly-err">Въведете месечен лимит.</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Разрешени операции</label>
+            <div style="display:flex;flex-direction:column;gap:.35rem;margin-top:.35rem">
+              <label style="display:flex;gap:.4rem;align-items:center;font-weight:normal;cursor:pointer">
+                <input type="checkbox" id="cc-op-online" style="width:auto" checked /> Онлайн плащания
+              </label>
+              <label style="display:flex;gap:.4rem;align-items:center;font-weight:normal;cursor:pointer">
+                <input type="checkbox" id="cc-op-pos" style="width:auto" checked /> POS плащания
+              </label>
+              <label style="display:flex;gap:.4rem;align-items:center;font-weight:normal;cursor:pointer">
+                <input type="checkbox" id="cc-op-atm" style="width:auto" checked /> Теглене от банкомат
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:.6rem">
+            <label style="display:flex;gap:.5rem;align-items:center;cursor:pointer;font-weight:normal">
+              <input type="checkbox" id="cc-diff-user" style="width:auto" />
+              Ползвателят на картата е различен от управителя
+            </label>
+          </div>
+
+          <div id="cc-user-wrap"
+            style="display:none;border:1px solid var(--border);border-radius:8px;padding:.8rem;margin-top:.4rem">
+            <p class="hint" style="margin-bottom:.6rem">👤 Данни за ползвателя на картата</p>
+            <div class="row-2">
+              <div class="form-group">
+                <label for="cc-user-name">Три имена</label>
+                <input id="cc-user-name" type="text" placeholder="Мария Димитрова Иванова" />
+                <span class="err" id="cc-user-name-err">Въведете поне две имена.</span>
+              </div>
+              <div class="form-group">
+                <label for="cc-user-egn">ЕГН</label>
+                <input id="cc-user-egn" type="text" placeholder="8801010110" maxlength="10" />
+                <span class="err" id="cc-user-egn-err">Въведете 10-цифрен ЕГН.</span>
+              </div>
+            </div>
+            <div class="row-2">
+              <div class="form-group">
+                <label for="cc-user-position">Длъжност</label>
+                <input id="cc-user-position" type="text" placeholder="Финансов директор" />
+                <span class="err" id="cc-user-position-err">Въведете длъжност.</span>
+              </div>
+              <div class="form-group">
+                <label for="cc-user-phone">Телефон</label>
+                <input id="cc-user-phone" type="tel" placeholder="+359 88 888 8888" />
+                <span class="err" id="cc-user-phone-err">Въведете телефон.</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="cc-user-email">Имейл</label>
+              <input id="cc-user-email" type="email" placeholder="m.dimitrova@company.bg" />
+              <span class="err" id="cc-user-email-err">Въведете валиден имейл.</span>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;margin-top:.8rem">
+            <button type="button" class="btn btn-ghost" id="corp-prev-3">← Назад</button>
+            <button type="button" class="btn btn-blue" id="corp-next-3">Напред →</button>
+          </div>
+        </div>
+
+        <!-- ── STEP 4: Документи ─────────────────────────────────── -->
+        <div id="corp-s4" style="display:none">
+          <p class="hint" style="margin-bottom:.8rem">Стъпка 4 от 5 – Прикачете документи</p>
+
+          <div class="form-group">
+            <label for="cc-doc-statute">Учредителен акт / Устав <span style="color:#da3633">*</span></label>
+            <input id="cc-doc-statute" type="file" accept=".pdf,.jpg,.jpeg,.png" />
+            <span class="err" id="cc-doc-statute-err">Прикачете учредителен акт.</span>
+          </div>
+
+          <div class="form-group">
+            <label for="cc-doc-status">Актуално състояние <span style="color:#da3633">*</span></label>
+            <input id="cc-doc-status" type="file" accept=".pdf,.jpg,.jpeg,.png" />
+            <span class="err" id="cc-doc-status-err">Прикачете актуално състояние.</span>
+          </div>
+
+          <div class="form-group">
+            <label for="cc-doc-id">Лична карта (скан/снимка) <span style="color:#da3633">*</span></label>
+            <input id="cc-doc-id" type="file" accept=".pdf,.jpg,.jpeg,.png" />
+            <span class="err" id="cc-doc-id-err">Прикачете лична карта.</span>
+          </div>
+
+          <div class="form-group">
+            <label for="cc-doc-poa">Пълномощно <span style="font-weight:normal;color:var(--muted)">(ако има упълномощено
+                лице)</span></label>
+            <input id="cc-doc-poa" type="file" accept=".pdf,.jpg,.jpeg,.png" />
+          </div>
+
+          <div class="form-group">
+            <label for="cc-doc-aml">Декларации (AML / KYC) <span style="color:#da3633">*</span></label>
+            <input id="cc-doc-aml" type="file" accept=".pdf,.jpg,.jpeg,.png" />
+            <span class="err" id="cc-doc-aml-err">Прикачете AML/KYC декларация.</span>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;margin-top:.8rem">
+            <button type="button" class="btn btn-ghost" id="corp-prev-4">← Назад</button>
+            <button type="button" class="btn btn-blue" id="corp-next-4">Напред →</button>
+          </div>
+        </div>
+
+        <!-- ── STEP 5: Декларации и потвърждение ─────────────────── -->
+        <div id="corp-s5" style="display:none">
+          <p class="hint" style="margin-bottom:.8rem">Стъпка 5 от 5 – Декларации и съгласия</p>
+
+          <div class="form-group">
+            <label
+              style="display:flex;gap:.5rem;align-items:flex-start;font-weight:normal;cursor:pointer;line-height:1.5">
+              <input type="checkbox" id="cc-chk-tos" style="width:auto;margin-top:.2rem" />
+              Съгласен/на съм с Общите условия на банката <span style="color:#da3633">*</span>
+            </label>
+            <span class="err" id="cc-chk-tos-err">Задължително съгласие.</span>
+          </div>
+
+          <div class="form-group">
+            <label
+              style="display:flex;gap:.5rem;align-items:flex-start;font-weight:normal;cursor:pointer;line-height:1.5">
+              <input type="checkbox" id="cc-chk-ubo" style="width:auto;margin-top:.2rem" />
+              Декларирам, че съм действителен собственик на фирмата <span style="color:#da3633">*</span>
+            </label>
+            <span class="err" id="cc-chk-ubo-err">Задължителна декларация.</span>
+          </div>
+
+          <div class="form-group">
+            <label
+              style="display:flex;gap:.5rem;align-items:flex-start;font-weight:normal;cursor:pointer;line-height:1.5">
+              <input type="checkbox" id="cc-chk-funds" style="width:auto;margin-top:.2rem" />
+              Декларирам законния произход на средствата <span style="color:#da3633">*</span>
+            </label>
+            <span class="err" id="cc-chk-funds-err">Задължителна декларация.</span>
+          </div>
+
+          <div class="form-group">
+            <label
+              style="display:flex;gap:.5rem;align-items:flex-start;font-weight:normal;cursor:pointer;line-height:1.5">
+              <input type="checkbox" id="cc-chk-gdpr" style="width:auto;margin-top:.2rem" />
+              Давам съгласие за обработка на лични данни (GDPR) <span style="color:#da3633">*</span>
+            </label>
+            <span class="err" id="cc-chk-gdpr-err">Задължително GDPR съгласие.</span>
+          </div>
+
+          <div class="form-group" style="margin-top:.6rem">
+            <label>Въведете резултата: <strong id="corp-captcha-q"></strong> <span
+                style="color:#da3633">*</span></label>
+            <input id="corp-captcha-ans" type="number" placeholder="?" style="max-width:110px" />
+            <span class="err" id="corp-captcha-err">Грешен отговор.</span>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;margin-top:.8rem">
+            <button type="button" class="btn btn-ghost" id="corp-prev-5">← Назад</button>
+            <button type="submit" class="btn btn-green">Подай заявка</button>
+          </div>
+        </div>
+      </form>
+
+      <div class="success-msg" id="cc-success">✔ Заявката е подадена успешно. Очаква одобрение от банков оператор.</div>
     </div>
-
-    <form id="corpForm" novalidate>
-      <div class="row-2">
-        <div class="form-group">
-          <label for="cc-company">Фирма (наименование)</label>
-          <input id="cc-company" type="text" placeholder="Tech Solutions ЕООД" />
-          <span class="err" id="cc-company-err">Въведете наименование.</span>
-        </div>
-        <div class="form-group">
-          <label for="cc-eik">ЕИК / Булстат</label>
-          <input id="cc-eik" type="text" placeholder="123456789" maxlength="9" />
-          <span class="err" id="cc-eik-err">ЕИК трябва да e 9 цифри.</span>
-        </div>
-      </div>
-
-      <div class="row-2">
-        <div class="form-group">
-          <label for="cc-holder">Картодържател</label>
-          <input id="cc-holder" type="text" placeholder="Мария Димитрова" />
-          <span class="err" id="cc-holder-err">Въведете две имена.</span>
-        </div>
-        <div class="form-group">
-          <label for="cc-email">Служебен имейл</label>
-          <input id="cc-email" type="email" placeholder="m.dimitrova@company.bg" />
-          <span class="err" id="cc-email-err">Невалиден имейл адрес.</span>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="cc-level">Ниво на оторизация</label>
-        <select id="cc-level">
-          <option value="">- избери -</option>
-          <option value="1">Ниво 1 - до 500 BGN/ден (служител)</option>
-          <option value="2">Ниво 2 - до 2 000 BGN/ден (мениджър)</option>
-          <option value="3">Ниво 3 - до 10 000 BGN/ден (директор)</option>
-          <option value="4">Ниво 4 - неограничен (изпълнителен директор)</option>
-        </select>
-        <span class="err" id="cc-level-err">Изберете ниво на оторизация.</span>
-      </div>
-
-      <div class="form-group" style="margin-top:.9rem">
-        <label for="cc-monthly">Месечен лимит (BGN)</label>
-        <input id="cc-monthly" type="number" min="0" placeholder="5000" />
-        <span class="err" id="cc-monthly-err">Въведете месечен лимит.</span>
-      </div>
-
-      <button type="submit" class="btn btn-blue">Регистрирай карта</button>
-      <div class="success-msg" id="cc-success">✔ Заявката e подадена. Очаква одобрение на Ниво 2.</div>
-    </form>
   </div>
-
 </body>
+
 </html>
