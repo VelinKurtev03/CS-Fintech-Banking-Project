@@ -1,33 +1,58 @@
-<div class="bg-slate-950 text-white">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- Tailwind config -->
+
+  <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+
+  <title>Fintech</title>
+</head>
+
+<body class="bg-white text-slate-900 dark:bg-slate-950 dark:text-white">
+
+
+
   <!-- Header -->
-     <button onclick="toggleTheme()" 
-    class="fixed top-4 right-4 z-50 text-xs px-3 py-1 rounded-md
-    bg-slate-800 text-white 
-    dark:bg-white dark:text-black transition">
-    Смени тема
-  </button>
   <header class="absolute inset-x-0 top-0 z-50">
-    <script src="https://cdn.tailwindcss.com"></script>
     <nav class="flex items-center justify-between p-6 lg:px-12">
+
+      <!-- Logo -->
       <div class="flex lg:flex-1">
-        <a href="#" class="text-xl font-bold tracking-tight text-white">
+        <a href="#" class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
           Fintech Shit
         </a>
       </div>
 
+      <!-- Nav links -->
       <div class="hidden lg:flex lg:gap-x-10">
-        <a href="overdraft.html" class="text-sm font-medium text-slate-300 hover:text-white">Overdraft</a>
-        <a href="#" class="text-sm font-medium text-slate-300 hover:text-white">Solutions</a>
-        <a href="#" class="text-sm font-medium text-slate-300 hover:text-white">Pricing</a>
-        <a href="#" class="text-sm font-medium text-slate-300 hover:text-white">Company</a>
+        <a href="overdraft.html" class="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Overdraft</a>
+        <a href="#" class="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Solutions</a>
+        <a href="#" class="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Pricing</a>
+        <a href="#" class="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Company</a>
       </div>
 
+      <!-- Right side -->
       <div class="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
-        <a href="#" class="text-sm font-medium text-slate-300 hover:text-white">Sign in</a>
+        <a href="#" class="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Sign in</a>
         <a href="#" class="rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-400">
           Get started
         </a>
+        <button onclick="toggleTheme()" 
+        class="ml-4 text-xs px-3 py-1 rounded-md
+        bg-slate-800 text-white 
+        dark:bg-white dark:text-black transition">
+        luna
+      </button>
       </div>
+
     </nav>
   </header>
 
@@ -35,23 +60,29 @@
   <div class="relative isolate px-6 pt-32 lg:px-8">
     
     <!-- Background glow -->
-    <div class="absolute inset-0 -z-10 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900"></div>
+    <div class="absolute inset-0 -z-10 
+      bg-gradient-to-br from-slate-100 via-white to-slate-100
+      dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
+    </div>
 
     <div class="mx-auto max-w-4xl text-center py-32">
       
       <!-- Badge -->
-      <div class="mb-6 inline-flex items-center rounded-full bg-white/5 px-4 py-1 text-sm text-slate-300 ring-1 ring-white/10">
+      <div class="mb-6 inline-flex items-center rounded-full 
+        bg-black/5 text-slate-600 ring-1 ring-black/10
+        px-4 py-1 text-sm
+        dark:bg-white/5 dark:text-slate-300 dark:ring-white/10">
         Trusted by fintech teams worldwide
       </div>
 
       <!-- Headline -->
       <h1 class="text-5xl font-semibold tracking-tight sm:text-7xl leading-tight">
         Modern infrastructure for
-        <span class="text-emerald-400">financial growth</span>
+        <span class="text-emerald-500 dark:text-emerald-400">financial growth</span>
       </h1>
 
       <!-- Subtext -->
-      <p class="mt-6 text-lg text-slate-400 max-w-2xl mx-auto">
+      <p class="mt-6 text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
         Build, scale, and secure your financial products with real-time APIs,
         global payments, and enterprise-grade compliance.
       </p>
@@ -61,27 +92,44 @@
         <a href="#" class="rounded-md bg-emerald-500 px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-400 shadow-lg shadow-emerald-500/20">
           Start building
         </a>
-        <a href="#" class="rounded-md border border-white/10 px-6 py-3 text-sm font-semibold text-slate-300 hover:bg-white/5">
+        <a href="#" class="rounded-md 
+          border border-black/10 text-slate-700 hover:bg-black/5
+          px-6 py-3 text-sm font-semibold
+          dark:border-white/10 dark:text-slate-300 dark:hover:bg-white/5">
           Book demo
         </a>
       </div>
 
-      <!-- Stats / trust indicators -->
+      <!-- Stats -->
       <div class="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
         <div>
-          <p class="text-3xl font-semibold text-white">$12B+</p>
-          <p class="text-sm text-slate-400 mt-1">Processed annually</p>
+          <p class="text-3xl font-semibold text-slate-900 dark:text-white">$12B+</p>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Processed annually</p>
         </div>
         <div>
-          <p class="text-3xl font-semibold text-white">99.99%</p>
-          <p class="text-sm text-slate-400 mt-1">Uptime guarantee</p>
+          <p class="text-3xl font-semibold text-slate-900 dark:text-white">99.99%</p>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Uptime guarantee</p>
         </div>
         <div>
-          <p class="text-3xl font-semibold text-white">120+</p>
-          <p class="text-sm text-slate-400 mt-1">Countries supported</p>
+          <p class="text-3xl font-semibold text-slate-900 dark:text-white">120+</p>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Countries supported</p>
         </div>
       </div>
 
     </div>
   </div>
-</div>
+
+  <!-- Toggle Script -->
+  <script>
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+    }
+
+    // Auto-detect system theme
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+
+</body>
+</html>
